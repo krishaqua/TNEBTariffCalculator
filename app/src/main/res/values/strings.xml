@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TNEB Tariff Calculator</string>
+    <string name="title_section1">Calculator 2015</string>
+    <string name="title_section2">Old Calculator Apr 2012</string>
+    <string name="title_section3">Online Payment</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="get_tariff">Get Tariff</string>
+    <string name="welcome">Welcome!</string>
+    <string name="error_1000">Something went wrong. Error Code: E1000</string>
+    <string name="info_large_units">Please input lower value(max 6 digits)</string>
+    <string name="tariff">Tariff:</string>
+    <string name="tariff_decimal_format">#.00</string>
+    <string name="empty_string"></string>
+    <string name="enter_units">Enter bi-monthly Units</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
