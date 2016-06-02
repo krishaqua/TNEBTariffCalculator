@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -67,13 +68,16 @@ public class Calculator extends ActionBarActivity
         mSection = number;
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.calc2016_section);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.calc2015_section);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.calc2012_section);
+                break;
+            case 4:
+                mTitle = getString(R.string.onlinepayment_section);
                 break;
         }
     }
@@ -99,21 +103,6 @@ public class Calculator extends ActionBarActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-/*
-@Override
-public void onBackPressed() {
-Fragment webViewFrag = getSupportFragmentManager().findFragmentById(R.layout.fragment_payment);
-if (webViewFrag instanceof PaymentFragment) {
-boolean goBack = ((PaymentFragment)webViewFrag).canGoBack();
-if(goBack) {
-((PaymentFragment)webViewFrag).goBack();
-}
-else {
-super.onBackPressed();
-}
-}
-}
-*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -150,32 +139,49 @@ super.onBackPressed();
         TextView myTextView = (TextView) findViewById(R.id.textView);
         EditText myUnitsText = (EditText) findViewById(R.id.editText);
         String unitsStr = myUnitsText.getText().toString();
-        if (unitsStr != null && !unitsStr.isEmpty()) {
-            if (unitsStr.length() <= 6) {
-                int ebUnits = Integer.parseInt(unitsStr);
-                //myTextView.setText("Units Consumed:" + unitsConsumed);
-                try {
-                    DecimalFormat df = new DecimalFormat(getString(R.string.tariff_decimal_format));
-                    float tariff;
-                    if (mSection == 2) {
-                        tariff = getTariff2012(ebUnits);
-                    } else {
+        if (unitsStr != null && !unitsStr.isEmpty()) if (unitsStr.length() <= 6) {
+            int ebUnits = Integer.parseInt(unitsStr);
+            //myTextView.setText("Units Consumed:" + unitsConsumed);
+            try {
+                DecimalFormat df = new DecimalFormat(getString(R.string.tariff_decimal_format));
+                float tariff = 0;
+                switch (mSection) {
+                    case 1:
+                        tariff = getTariff2016(ebUnits);
+                        break;
+                    case 2:
                         tariff = getTariff2015(ebUnits);
-                    }
-
-                    //myTariffView.setText(getString(R.string.tariff));
-
-                    myTextView.setText("\u20B9 " + df.format(tariff));
-
-                } catch (Exception exp) {
-                    myTextView.setText(getString(R.string.error_1000));
-
+                        break;
+                    case 3:
+                        tariff = getTariff2012(ebUnits);
+                        break;
                 }
-            } else {
-                myTextView.setText(getString(R.string.info_large_units));
+                myTextView.setText("\u20B9 " + df.format(tariff));
+
+            } catch (Exception exp) {
+                myTextView.setText(getString(R.string.error_1000));
 
             }
+        } else {
+            myTextView.setText(getString(R.string.info_large_units));
+
         }
+    }
+
+    private float getTariff2016(int ebUnits) {
+        float ebAmount = 0;
+        float chargedUnits = 0;
+        chargedUnits = ebUnits - 100;
+        if (ebUnits > 0 && ebUnits <= 100) {
+            ebAmount = 0;
+        } else if (ebUnits <= 200) {
+            ebAmount = 20 + 1.5f * chargedUnits;
+        } else if (ebUnits <= 500) {
+            ebAmount = 30 + 100 * 2 + (chargedUnits - 100) * 3;
+        } else if (ebUnits > 500) {
+            ebAmount = 50 + 100 * 3.5f + 300 * 4.6f + (chargedUnits - 400) * 6.6f;
+        }
+        return ebAmount;
     }
 
     private float getTariff2015(int ebUnits) {
@@ -203,8 +209,8 @@ super.onBackPressed();
             tariff = oldEbAmount;
         }
         else if (ebUnits > 500) {
-            oldEbAmount = 40 + 200 * 3f + 300 * 4f + (ebUnits - 500) * 5.75f;
-            ebAmount = 40 + 200 * 3.5f + 300 * 4.6f + (ebUnits - 500) * 6.6f;
+            oldEbAmount = 50 + 200 * 3f + 300 * 4f + (ebUnits - 500) * 5.75f;
+            ebAmount = 50 + 200 * 3.5f + 300 * 4.6f + (ebUnits - 500) * 6.6f;
             tariff = ebAmount;
         }
         return tariff;
@@ -281,10 +287,14 @@ super.onBackPressed();
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView;
-            if(mSection ==3) {
+            if (mSection == 4) {
                 rootView = inflater.inflate(R.layout.fragment_payment, container, false);
                 myWebView = (WebView) rootView.findViewById(R.id.webView);
                 myWebView.setWebViewClient(new WebViewClient());
+
+                // Enable Javascript
+                WebSettings webSettings = myWebView.getSettings();
+                webSettings.setJavaScriptEnabled(true);
 
                 myWebView.loadUrl("https://www.tnebnet.org/awp/tneb");
                 myWebView.setOnKeyListener(new View.OnKeyListener(){

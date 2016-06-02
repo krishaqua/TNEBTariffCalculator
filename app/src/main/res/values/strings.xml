@@ -2,9 +2,10 @@
 <resources>
 
     <string name="app_name">TNEB Tariff Calculator</string>
-    <string name="title_section1">Calculator 2015</string>
-    <string name="title_section2">Old Calculator Apr 2012</string>
-    <string name="title_section3">Online Payment</string>
+    <string name="calc2016_section">Calculator 2016</string>
+    <string name="calc2015_section">Calculator 2015</string>
+    <string name="calc2012_section">Calculator Apr 2012</string>
+    <string name="onlinepayment_section">Online Payment</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
